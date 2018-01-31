@@ -9,8 +9,9 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="name" />
+<meta name="author" content="Ricardo Alexandro Aguilar" />
 
+<meta name="date" content="2018-01-29" />
 
 <title>R programming (r4ds Section III)</title>
 
@@ -119,8 +120,8 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">R programming (r4ds Section III)</h1>
-<h4 class="author"><em>name</em></h4>
-<h4 class="date"><em>date</em></h4>
+<h4 class="author"><em>Ricardo Alexandro Aguilar</em></h4>
+<h4 class="date"><em>01/29/2018</em></h4>
 
 </div>
 
@@ -128,6 +129,8 @@ $(document).ready(function () {
 <div id="ch-18-pipes" class="section level1">
 <h1>Ch 18: Pipes</h1>
 <p><em>Demonstrate the use of the regular pipe (<code>%&gt;%</code>) and the “explosion” operator (<code>%$%</code>) in some example</em></p>
+<pre class="r"><code>table(iris %&gt;% select(Species) %&gt;% filter(Species == &quot;setosa&quot;))
+iris %$% table(Species, Sepal.Length)</code></pre>
 <hr />
 </div>
 <div id="ch-19-functions" class="section level1">
@@ -135,29 +138,136 @@ $(document).ready(function () {
 <div id="when-should-you-write-a-function" class="section level3">
 <h3>19.2: When should you write a function?</h3>
 <p>Answer any 3</p>
+<ol style="list-style-type: decimal">
+<li><p>“True” is not a parameter because the function requires only one parameter since the na.rm and finite arguments in the range function are set to TRUE. The rescale01 function requires a vector of numeric values.<br />
+NA would be the ouput for the missing value.</p></li>
+<li></li>
+</ol>
+<pre class="r"><code>rescale01 &lt;- function(x) {
+  rng &lt;- range(x, na.rm = TRUE, finite = TRUE)
+  if(x == -Inf)
+    x &lt;- 0
+  if(x == Inf)
+    x &lt;- 1
+  (x - rng[1]) / (rng[2] - rng[1])
+}</code></pre>
 <p><em>Describe one time where you wish you had written a function, but didn’t.</em></p>
+<p>I wish I wrote a function while working on the Chem data (I would have avoided copying and pasting ggplot code).</p>
 </div>
 <div id="functions-are-for-humans-and-computers" class="section level3">
 <h3>19.3: Functions are for humans and computers</h3>
 <p>Answer any 2</p>
+<ol style="list-style-type: decimal">
+<li>The first function checks if the first string starts with the second string. I would name it str_start. The second funtion removes the last element of a vector. I would name it rm_last_elem. The third function repeats the second vector until there are x amount of elements (equal to the length of the first vector). I would name it rep_vect_by_elem.</li>
+</ol>
+<pre class="r"><code>f3 &lt;- function(x, y) {
+  rep(y, length.out = length(x))
+}
+f3(1:32,2:12)</code></pre>
+<pre><code>##  [1]  2  3  4  5  6  7  8  9 10 11 12  2  3  4  5  6  7  8  9 10 11 12  2
+## [24]  3  4  5  6  7  8  9 10 11</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li></li>
+</ol>
+<pre class="r"><code>#int retrieve(int a, int i){
+#  int x = a / pow(10, i - 1);
+#  int digit = x % 10
+#  return digit;
+#}</code></pre>
+<p>I made this function for CSCI311. I can rename it to get_digit and rename its arguments to number and digit_place (number = 81324, 4 would be the 1st digit, 2 is the 2nd digit, etc.)</p>
 <p><em>What does “Functions are for humans and computers” mean to you?</em></p>
+<p>A function should be easy for a person to understand when looking at the code and when using it.</p>
 </div>
 <div id="conditional-execution" class="section level3">
 <h3>19.4 Conditional execution</h3>
 <p>Answer any 3</p>
+<ol style="list-style-type: decimal">
+<li>The if function does something when a condition is met while the ifelse function does something when the condition is true and false.</li>
+</ol>
+<pre class="r"><code># Example 1
+x &lt;- 2
+y &lt;- 0
+if(x == 3)
+  y &lt;- x;
+y</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>ifelse(x == 3, y &lt;- x, y &lt;- 1)</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code># Example 2
+x &lt;- 4
+y &lt;- 0
+if(x &gt; 3)
+  y &lt;- x;
+y</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>ifelse(x &gt; 3, y &lt;- x, y &lt;- 1)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code># Example 3
+x &lt;- 4
+y &lt;- 0
+if(x &lt; 3)
+  y &lt;- x;
+y</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>ifelse(x == 3, y &lt;- x, y &lt;- 1)</code></pre>
+<pre><code>## [1] 1</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li></li>
+</ol>
+<pre class="r"><code>greeting &lt;- function(time = lubridate::hour(lubridate::now())){
+  if(time &lt; 12)
+    &quot;good morning&quot;
+  else if(time &lt; 18)
+    &quot;good afternoon&quot;
+  else
+    &quot;good evening&quot;
+}
+greeting()</code></pre>
+<pre><code>## [1] &quot;good morning&quot;</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li></li>
+</ol>
+<pre class="r"><code>fizzbuzz &lt;- function(x){
+  if(x%%3 == 0 &amp; x%%5 == 0)
+    &quot;fizzbuzz&quot;
+  else if(x%%3 == 0)
+    &quot;fizz&quot;
+  else if(x%%5 == 0)
+    &quot;buzz&quot;
+  else
+    x
+}
+fizzbuzz(10)</code></pre>
+<pre><code>## [1] &quot;buzz&quot;</code></pre>
+<pre class="r"><code>fizzbuzz(15)</code></pre>
+<pre><code>## [1] &quot;fizzbuzz&quot;</code></pre>
+<pre class="r"><code>fizzbuzz(9)</code></pre>
+<pre><code>## [1] &quot;fizz&quot;</code></pre>
+<pre class="r"><code>fizzbuzz(7)</code></pre>
+<pre><code>## [1] 7</code></pre>
 </div>
 <div id="function-arguments" class="section level3">
 <h3>19.5 Function arguments</h3>
 <p>Answer any 2</p>
+<ol style="list-style-type: decimal">
+<li></li>
+</ol>
+<pre class="r"><code>#commas &lt;- function(...) stringr::str_c(..., collapse = &quot;, &quot;)
+#commas(letters, collapse = &quot;-&quot;)</code></pre>
+<p>It gives you an error because collapse is an argument for str_c not commmas.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>The trim argument removes the given proportion of observations from each side of the vector. It would be useful when your data is skewed.</li>
+</ol>
 </div>
 <div id="return-values" class="section level3">
 <h3>19.6: Return values</h3>
 <p><em>Is it mandatory that you <code>return()</code> a value from a function? If not, give on reasons for why you would want to do so. If so, explain what happens if you don’t include the return.</em></p>
+<p>It isn’t mandatory, but it is really useful when you want to end a function under certain conditions before you reach the end. For example, if you catch an error in the input that would cause an error in the rest of the function. If you don’t explicitly return something, (depending on how it was written) your function might not return the results or it will return the result of the last operation.</p>
 </div>
 <div id="environment" class="section level3">
 <h3>19.7: Environment</h3>
-<p><em>What’s the problem with the example function at the beginning of this chapter?</em></p>
-<hr />
+<p><em>What’s the problem with the example function at the beginning of this chapter?</em><br />
+The function uses y as a variable, but y is not defined. The function “knows” that x will be an input, but doesn’t know where y is coming from. This causes it to look into your environment and might cause bugs if you have a variable y defined in your environment. —-</p>
 </div>
 </div>
 <div id="vectors" class="section level1">
@@ -165,10 +275,27 @@ $(document).ready(function () {
 <div id="important-types-of-atomic-vector" class="section level3">
 <h3>20.3: Important types of atomic vector</h3>
 <p>Answer any 2</p>
+<ol style="list-style-type: decimal">
+<li><p>The functions are very similar and will pretty much get the same results except with inputs that are neither finite or infinite (NA’s and NaN’s). Since they are neither, both functions will return false, but the ! in !is.infinite(x) will change it to true.</p></li>
+<li><p>The near function returns true if the two vectors are equal. The function is able to tolerate the manipulation of the vectors and say if they’re close enough to being the same depending on the tolerance of comparison.</p></li>
+</ol>
 </div>
 <div id="using-atomic-vectors" class="section level3">
 <h3>20.4: Using Atomic Vectors</h3>
 <p>Answer #4, and then 2 others.</p>
+<ol start="4" style="list-style-type: decimal">
+<li></li>
+</ol>
+<pre class="r"><code>a &lt;- function(x){
+  x[length(x)]
+}
+a(1:12)</code></pre>
+<pre><code>## [1] 12</code></pre>
+<pre class="r"><code>b &lt;- function(x){
+  x[1:length(x) %% 2 == 0]
+}
+b(1:12)</code></pre>
+<pre><code>## [1]  2  4  6  8 10 12</code></pre>
 </div>
 <div id="recursive-vectors-lists" class="section level3">
 <h3>20.5: Recursive vectors (lists)</h3>
