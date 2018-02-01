@@ -35,6 +35,11 @@ NA would be the ouput for the missing value.
 
 ```r
 # I wasn't sure what it meant by "mapped to", so I assumed it wants me to return those values
+
+## Mapped to means that, you should replace all values like so
+## -Inf -> 0
+## Inf -> 1
+## additionally, if (x == -Inf) Doesnt work for this function as x is a vector which contains multiple elements
 rescale01 <- function(x) {
   rng <- range(x, na.rm = TRUE, finite = TRUE)
   if(x == -Inf)
@@ -48,6 +53,7 @@ rescale01 <- function(x) {
 5.
 
 ```r
+## What is the question here?
 x <- c(1, NA, NA)
 y <- c(1, 2, NA, 0)
 both_na <- function(x, y){
@@ -97,7 +103,9 @@ I made this function for CSCI311. I can rename it to get_digit and rename its ar
 _What does "Functions are for humans and computers" mean to you?_
   
 A function should be easy for a person to understand when looking at the code and when using it.
-  
+
+// What about for computers?
+
 ### 19.4 Conditional execution
 Answer any 3
   
@@ -182,7 +190,7 @@ greeting()
 ```
 
 ```
-## [1] "good afternoon"
+## [1] "good morning"
 ```
 
   
@@ -237,12 +245,15 @@ Answer any 2
 1.
 
 ```r
-#commas <- function(...) stringr::str_c(..., collapse = ", ")
-#commas(letters, collapse = "-")
+## If you want to write code that has place holder values, simply put eval = false in the ```{r} part of the code chunk
+commas <- function(...) stringr::str_c(..., collapse = ", ")
+commas(letters, collapse = "-")
 ```
-  
+
 It gives you an error because collapse is an argument for str_c not commmas.  
-  
+
+Not 100% on the verbage above, I think its because you declared the function with colapse given a default argument of ", " means that the compiler for stringr will not allow you to pass it a new argument, hence the error message.
+
 3.  
 The trim argument removes the given proportion of observations from each side of the vector. It would be useful when your data is skewed.  
   
@@ -275,6 +286,7 @@ The function mean(is.na(x)) tells you the proportion of elements in x that are N
 4.
 
 ```r
+## Please include what the question is
 a <- function(x){
   x[length(x)]
 }
@@ -349,6 +361,8 @@ Answer either one
 1.  
 a) list(a, b, list(c, d), list(e, f)) = {a, b, {c, d}, {e,f}}
 b)list(list(list(list(list(list(a)))))) = {{{{{{a}}}}}}
+
+// Run the code for a and re-evaluate your set notation.  'a' is a set (vector/list) of length one and so is b.  What you have above may technically be correct but I would argue that it would be more correct to have 'a' and 'b' within {}
   
 ### 20.7: Augmented vectors
 
@@ -357,7 +371,7 @@ Unlike data frames, tibbles limit printing to ten rows and the amount of columns
 ----
 
 # Chapter 21: Iteration
-
+//Don't forget chapter 21!
 ### 21.2: For Loops
 Any one question
 
