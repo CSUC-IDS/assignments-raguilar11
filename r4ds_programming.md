@@ -34,14 +34,30 @@ NA would be the ouput for the missing value.
 2.
 
 ```r
+# I wasn't sure what it meant by "mapped to", so I assumed it wants me to return those values
 rescale01 <- function(x) {
   rng <- range(x, na.rm = TRUE, finite = TRUE)
   if(x == -Inf)
-    x <- 0
+    return(0)
   if(x == Inf)
-    x <- 1
+    return(1)
   (x - rng[1]) / (rng[2] - rng[1])
 }
+```
+  
+5.
+
+```r
+x <- c(1, NA, NA)
+y <- c(1, 2, NA, 0)
+both_na <- function(x, y){
+  sum(is.na(x)) + sum(is.na(y))
+}
+both_na(x, y)
+```
+
+```
+## [1] 3
 ```
 
   
@@ -166,7 +182,7 @@ greeting()
 ```
 
 ```
-## [1] "good morning"
+## [1] "good afternoon"
 ```
 
   
@@ -252,6 +268,10 @@ Answer any 2
 ### 20.4: Using Atomic Vectors
 Answer #4, and then 2 others. 
   
+
+1. 
+The function mean(is.na(x)) tells you the proportion of elements in x that are NA while sum(!is.finite(x)) gives the amount of elements in the vector that are not finite values.
+
 4.
 
 ```r
@@ -276,14 +296,64 @@ b(1:12)
 ## [1]  2  4  6  8 10 12
 ```
 
+```r
+cc <- function(x){
+  x[-length(x)]
+}
+cc(1:12)
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10 11
+```
+
+```r
+d <- function(x){
+  x <- x[!is.na(x)]
+  x[x %% 2 == 0]
+}
+test <- c(1:12, NA)
+d(test)
+```
+
+```
+## [1]  2  4  6  8 10 12
+```
+  
+4. 
+
+```r
+x <- 1:12
+x[14]
+```
+
+```
+## [1] NA
+```
+
+```r
+y <- c(abc = 1, def = 2, xyz = 5)
+y["ddef"]
+```
+
+```
+## <NA> 
+##   NA
+```
+  
+Subsetting with a positive integer that's bigger than the length of the vector returns NA. Similarly, subsetting with a name that doesn't exist also returns NA.
 
 ### 20.5: Recursive vectors (lists)
 Answer either one
-
+  
+1.  
+a) list(a, b, list(c, d), list(e, f)) = {a, b, {c, d}, {e,f}}
+b)list(list(list(list(list(list(a)))))) = {{{{{{a}}}}}}
+  
 ### 20.7: Augmented vectors
 
 _Describe at least two differences between a `data.frame` and a `tibble`_
-
+Unlike data frames, tibbles limit printing to ten rows and the amount of columns that fit in the screen. Furthermore data frames use partial matching on column names while tibbles do not.
 ----
 
 # Chapter 21: Iteration
