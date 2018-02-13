@@ -33,7 +33,7 @@ Answer any 3
   
 1. "True" is not a parameter because the function requires only one parameter since the na.rm and finite arguments in the range function are set to TRUE. The rescale01 function requires a vector of numeric values.   
 NA would be the ouput for the missing value.  
-  l
+  
 2.
 ```{r}
 # I wasn't sure what it meant by "mapped to", so I assumed it wants me to return those values

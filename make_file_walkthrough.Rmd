@@ -1,0 +1,40 @@
+---
+title: "Makefile Walkthrough"
+author: "Ricardo Alexandro Aguilar"
+date: "February 12, 2018"
+output: pdf_document
+---
+
+I started by creating a regular r markdown file to take a look at the data. I loaded the ggplot2 library and read in the gapminder data set. 
+  
+```{r}
+library(ggplot2)
+gapminder <- read.csv("/Users/Ricardo/Documents/Math499/gapminder.csv")
+```
+  
+We usually start by visualizing the data, so that was my next step.  
+  
+```{r, message = FALSE, echo = FALSE}
+ggplot(gapminder, aes(x = year, y = lifeExp, group = country, col = country)) +
+  geom_point() + theme_bw() + theme(legend.position="none") + geom_smooth(se = FALSE) +
+  xlab("Year") + ylab("Life Expectancy") + ggtitle("Trends in Countries' Life Expectancy")
+```
+  
+I decided to color the lines even though there's no way of knowing which country a line represents because it would otherwise look like a black blob with random lines sticking out. 
+  
+Now that I knew what the data looks like, I started figuring out how the Makefile works. I haven't figured out the correct syntax and what the code does, but this is what I have so far.
+
+```{r}
+#all: gapminder_assignment
+
+#gapminder_assignment:
+
+#	Rscript -e "knitr::knit('gapminder_assignment.Rmd');/
+#  rmarkdown::render('gapminder_assignment.Rmd','html_document')"
+
+#clean:
+#	rm -rf *.md
+#	rm -rf *.html
+```
+  
+There's not much online (Google) that is useful since most of the examples I find are really complicated and lack a description of what each line does.
