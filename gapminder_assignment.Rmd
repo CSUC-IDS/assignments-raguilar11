@@ -2,7 +2,6 @@
 title: "Gapminder Assignment"
 author: "Ricardo Alexandro Aguilar"
 date: "February 12, 2018"
-<<<<<<< HEAD
 output: 
   pdf_document: default
   keep_md: yes
@@ -12,14 +11,6 @@ output:
 ```{r, echo=FALSE, }
 library(ggplot2)
 gapminder <- read.csv("/Users/Ricardo/Documents/Math499/assignments-raguilar11/gapminder.csv")
-=======
-output: pdf_document
----
-
-```{r, echo=FALSE, }
-library(ggplot2)
-gapminder <- read.csv("/Users/Ricardo/Documents/Math499/gapminder.csv")
->>>>>>> d0631e39ca2c5546faf63cc0b76ccecd2d5f96c4
 ```
   
 ```{r, message = FALSE, echo = FALSE}
@@ -28,9 +19,6 @@ ggplot(gapminder, aes(x = year, y = lifeExp, group = country, col = country)) +
   xlab("Year") + ylab("Life Expectancy") + ggtitle("Trends in Countries' Life Expectancy")
 ```
   
-<<<<<<< HEAD
 It seems that most countries in the data set have a life expectancy that increases the year increase. There are countries' life expectancies that initially increased, but are in decline. 
   
-=======
-It seems that most countries in the data set have a life expectancy that increases the year increase. There are countries' life expectancies that initially increased, but are in decline.
->>>>>>> d0631e39ca2c5546faf63cc0b76ccecd2d5f96c4
+
