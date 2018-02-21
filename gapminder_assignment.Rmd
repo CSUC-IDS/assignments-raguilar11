@@ -2,12 +2,15 @@
 title: "Gapminder Assignment"
 author: "Ricardo Alexandro Aguilar"
 date: "February 12, 2018"
-output: pdf_document
+output: 
+  pdf_document: default
+  keep_md: yes
+
 ---
   
 ```{r, echo=FALSE, }
 library(ggplot2)
-gapminder <- read.csv("/Users/Ricardo/Documents/Math499/gapminder.csv")
+gapminder <- read.csv("/Users/Ricardo/Documents/Math499/assignments-raguilar11/gapminder.csv")
 ```
   
 ```{r, message = FALSE, echo = FALSE}
