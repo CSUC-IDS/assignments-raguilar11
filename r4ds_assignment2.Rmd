@@ -16,8 +16,11 @@ library(modelr)
 # 23.2.1.  
   
 ## #1 One downside of the linear model is that it is sensitive to unusual values because the distance incorporates a squared term. Fit a linear model to the simulated data below, and visualise the results. Rerun a few times to generate different simulated datasets. What do you notice about the model?
-  
-```{r}
+
+```{r, echo = FALSE, eval = FALSE}
+Make sure to adjust fig.height to keep figs on the same page of output as the code that creates them!
+```
+```{r, fig.height = 3.5}
 sim1a <- tibble(
   x = rep(1:10, each = 3),
   y = x * 1.5 + 6 + rt(length(x), df = 2)
@@ -76,7 +79,10 @@ ggplot(sim1, aes(x = x)) + geom_point(aes(y = y)) +
   geom_line(data = grid_loess, aes(y = pred), color = 'blue') +
   geom_smooth(data = grid_loess, aes(y = pred), color = 'green')
 ``` 
-  
+```{r, echo = FALSE, eval = FALSE}
+For the above look at your error output and see what you could have changed in your code to remove the error messages in the final .pdf
+```
+
 The line using geom_smooth (green) completely covers the line (blue) that went through the given process, so they're the same line (the red line is just a regular line from a linear model).
   
 ## #3 What does geom_ref_line() do? What package does it come from? Why is displaying a reference line in plots showing residuals useful and important?
@@ -132,7 +138,10 @@ pander(lm(y ~ x1 * x2, data = sim3))
 I'm not really sure if this is what the question was asking; it requires more typing than just using "lm" and the output is confusing.
   
 ## #4 For sim4, which of mod1 and mod2 is better? I think mod2 does a slightly better job at removing patterns, but it’s pretty subtle. Can you come up with a plot to support my claim?
-  
+
+```{r, echo = FALSE, eval = FALSE}
+For these plots consider playing around with fig.height to make them more square.  You can see the lines quite well as it but the aspect ratio just feels wrong visually.
+```
 ```{r}
 mod1 <- lm(y ~ x1 + x2, data = sim3)
 mod2 <- lm(y ~ x1 * x2, data = sim3)
@@ -143,3 +152,8 @@ plot(mod2)
 ```
   
 The second model is better because the residuals of the second model follow the line better in the Q-Q plot and the residuals are randomly spread out (as seen in the Residuals vs Fitted plot), while the residuals in the first model start to deviate slighlty from the line as the theoretical quantities increase and there is a zig-zagging pattern in the Residuals vs Fitted plot.
+
+
+```{r, echo = FALSE, eval = FALSE}
+Good work, looks really clean. :thumbs_up:
+```
