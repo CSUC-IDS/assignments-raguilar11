@@ -10,7 +10,11 @@ output:
 ```{r, echo = FALSE, message = FALSE}
 library(dplyr)
 library(magrittr)
+<<<<<<< HEAD
 ## You really should put what the questions are for every question.  An answer without a question is mostly meaningless
+=======
+library(purrr)
+>>>>>>> ef1ba710d5fb074a245be2f2c0c50f6ce5f918de
 ```
 
 
@@ -239,8 +243,9 @@ Subsetting with a positive integer that's bigger than the length of the vector r
 ### 20.5: Recursive vectors (lists)
 Answer either one
   
-1.  
-a) list(a, b, list(c, d), list(e, f)) = {a, b, {c, d}, {e,f}}
+1. 
+  
+a) list(a, b, list(c, d), list(e, f)) = {a, b, {c, d}, {e,f}}  
 b)list(list(list(list(list(list(a)))))) = {{{{{{a}}}}}}
 
 // Run the code for a and re-evaluate your set notation.  'a' is a set (vector/list) of length one and so is b.  What you have above may technically be correct but I would argue that it would be more correct to have 'a' and 'b' within {}
@@ -248,6 +253,7 @@ b)list(list(list(list(list(list(a)))))) = {{{{{{a}}}}}}
 ### 20.7: Augmented vectors
 
 _Describe at least two differences between a `data.frame` and a `tibble`_
+  
 Unlike data frames, tibbles limit printing to ten rows and the amount of columns that fit in the screen. Furthermore data frames use partial matching on column names while tibbles do not.
 ----
 
@@ -256,15 +262,86 @@ Unlike data frames, tibbles limit printing to ten rows and the amount of columns
 ### 21.2: For Loops
 Any one question
 
+1.  
+```{r}
+#1.
+output <- vector("double", ncol(mtcars))
+for (i in seq_along(mtcars)) {  
+  output[[i]] <- mean(mtcars[[i]])
+}
+output
+#2.
+#time_hour has two types ("POSIXct" and "POSIXt") so it gives me an error
+#if i don't change it to something else
+flights <- nycflights13::flights
+flights$time_hour <- as.character(flights$time_hour)
+output <- vector("character", ncol(flights))
+for (i in 1:ncol(flights)) {  
+  output[[i]] <- class(flights[[i]])
+}
+output
+#3
+output <- vector("double", ncol(iris))
+for (i in seq_along(iris)) {  
+  output[[i]] <- length(unique(iris[[i]]))
+}
+output
+#4
+mu <- c(-10,  0, 10, 100)
+norms <- cbind("-10" = 1:10, "0" = 1:10, "10" = 1:10, "100" = 1:10)
+for (i in 1:length(mu)) {
+  norms[ ,i]<- rnorm(10, mean = mu[i])
+}
+norms
+```
+
+
 ### 21.3: For Loop Variations
 Problem #1
+```{r, eval=FALSE}
+files <- as.list(files)
+for (i in 1:length(files)) {
+  assign(files[i], read.csv(files[i]))
+}
+dplyr::bind_rows(files)
+```
 
 ### 21.4: For loops vs functionals
 Problem #2
 
+```{r}
+col_summary <- function(df, fun) {
+  for (nm in df) {
+    if(is.numeric(df$nm) == FALSE)
+      return()
+  }
+  out <- vector("double", length(df))
+  for (i in seq_along(df)) {
+    out[i] <- fun(df[[i]])
+  }
+  out
+}
+```
+
+
 ### 21.5: the map function
 Any 2 problems
-
+  
+1.
+```{r}
+#1
+map_dbl(mtcars, mean)
+#2
+map_chr(nycflights13::flights, typeof)
+#3
+myfun <- function(x) length(unique(x))
+map(iris, myfun)
+#4
+mu <- c(-10, 0, 10, 100)
+map(mu, rnorm, n = 10)
+```
+  
+4. map(-2:2, rnorm, n = 5) gives a list, that has five elements, for each element in in vector. Giving the output as a list lets it use vectors without getting an error with the vector. map_dbl(mu, rnorm, n = 10) gives an error because the result is no longer an atomic vector.
 ----
 
 End here. The rest of 21 is for your info only

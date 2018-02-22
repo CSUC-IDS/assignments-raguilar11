@@ -358,8 +358,9 @@ Subsetting with a positive integer that's bigger than the length of the vector r
 ### 20.5: Recursive vectors (lists)
 Answer either one
   
-1.  
-a) list(a, b, list(c, d), list(e, f)) = {a, b, {c, d}, {e,f}}
+1. 
+  
+a) list(a, b, list(c, d), list(e, f)) = {a, b, {c, d}, {e,f}}  
 b)list(list(list(list(list(list(a)))))) = {{{{{{a}}}}}}
 
 // Run the code for a and re-evaluate your set notation.  'a' is a set (vector/list) of length one and so is b.  What you have above may technically be correct but I would argue that it would be more correct to have 'a' and 'b' within {}
@@ -367,6 +368,7 @@ b)list(list(list(list(list(list(a)))))) = {{{{{{a}}}}}}
 ### 20.7: Augmented vectors
 
 _Describe at least two differences between a `data.frame` and a `tibble`_
+  
 Unlike data frames, tibbles limit printing to ten rows and the amount of columns that fit in the screen. Furthermore data frames use partial matching on column names while tibbles do not.
 ----
 
@@ -375,15 +377,191 @@ Unlike data frames, tibbles limit printing to ten rows and the amount of columns
 ### 21.2: For Loops
 Any one question
 
+1.  
+
+```r
+#1.
+output <- vector("double", ncol(mtcars))
+for (i in seq_along(mtcars)) {  
+  output[[i]] <- mean(mtcars[[i]])
+}
+output
+```
+
+```
+##  [1]  20.090625   6.187500 230.721875 146.687500   3.596563   3.217250
+##  [7]  17.848750   0.437500   0.406250   3.687500   2.812500
+```
+
+```r
+#2.
+#time_hour has two types ("POSIXct" and "POSIXt") so it gives me an error
+#if i don't change it to something else
+flights <- nycflights13::flights
+flights$time_hour <- as.character(flights$time_hour)
+output <- vector("character", ncol(flights))
+for (i in 1:ncol(flights)) {  
+  output[[i]] <- class(flights[[i]])
+}
+output
+```
+
+```
+##  [1] "integer"   "integer"   "integer"   "integer"   "integer"  
+##  [6] "numeric"   "integer"   "integer"   "numeric"   "character"
+## [11] "integer"   "character" "character" "character" "numeric"  
+## [16] "numeric"   "numeric"   "numeric"   "character"
+```
+
+```r
+#3
+output <- vector("double", ncol(iris))
+for (i in seq_along(iris)) {  
+  output[[i]] <- length(unique(iris[[i]]))
+}
+output
+```
+
+```
+## [1] 35 23 43 22  3
+```
+
+```r
+#4
+mu <- c(-10,  0, 10, 100)
+norms <- cbind("-10" = 1:10, "0" = 1:10, "10" = 1:10, "100" = 1:10)
+for (i in 1:length(mu)) {
+  norms[ ,i]<- rnorm(10, mean = mu[i])
+}
+norms
+```
+
+```
+##              -10          0        10       100
+##  [1,] -10.816432 -1.7500060  9.261131  99.12588
+##  [2,] -11.469140 -0.9264333  9.659074 101.08868
+##  [3,] -10.219580  0.9713595  8.915915 100.77214
+##  [4,]  -8.996649 -1.2350755  9.909277 100.83279
+##  [5,] -11.435374  0.4921697  8.361932 100.68485
+##  [6,]  -8.239430  1.5259275  9.453678  99.07818
+##  [7,]  -9.755496  0.4100462 10.168835 101.39065
+##  [8,]  -8.598891  2.2593169 11.035527 100.76080
+##  [9,]  -9.833644 -0.7228907 12.113562 100.12574
+## [10,] -10.450003  0.8600983  9.290330  99.15035
+```
+
+
 ### 21.3: For Loop Variations
 Problem #1
+
+```r
+files <- as.list(files)
+for (i in 1:length(files)) {
+  assign(files[i], read.csv(files[i]))
+}
+dplyr::bind_rows(files)
+```
 
 ### 21.4: For loops vs functionals
 Problem #2
 
+
+```r
+col_summary <- function(df, fun) {
+  for (nm in df) {
+    if(is.numeric(df$nm) == FALSE)
+      return()
+  }
+  out <- vector("double", length(df))
+  for (i in seq_along(df)) {
+    out[i] <- fun(df[[i]])
+  }
+  out
+}
+```
+
+
 ### 21.5: the map function
 Any 2 problems
+  
+1.
 
+```r
+#1
+map_dbl(mtcars, mean)
+```
+
+```
+##        mpg        cyl       disp         hp       drat         wt 
+##  20.090625   6.187500 230.721875 146.687500   3.596563   3.217250 
+##       qsec         vs         am       gear       carb 
+##  17.848750   0.437500   0.406250   3.687500   2.812500
+```
+
+```r
+#2
+map_chr(nycflights13::flights, typeof)
+```
+
+```
+##           year          month            day       dep_time sched_dep_time 
+##      "integer"      "integer"      "integer"      "integer"      "integer" 
+##      dep_delay       arr_time sched_arr_time      arr_delay        carrier 
+##       "double"      "integer"      "integer"       "double"    "character" 
+##         flight        tailnum         origin           dest       air_time 
+##      "integer"    "character"    "character"    "character"       "double" 
+##       distance           hour         minute      time_hour 
+##       "double"       "double"       "double"       "double"
+```
+
+```r
+#3
+myfun <- function(x) length(unique(x))
+map(iris, myfun)
+```
+
+```
+## $Sepal.Length
+## [1] 35
+## 
+## $Sepal.Width
+## [1] 23
+## 
+## $Petal.Length
+## [1] 43
+## 
+## $Petal.Width
+## [1] 22
+## 
+## $Species
+## [1] 3
+```
+
+```r
+#4
+mu <- c(-10, 0, 10, 100)
+map(mu, rnorm, n = 10)
+```
+
+```
+## [[1]]
+##  [1]  -8.998024 -11.875433  -9.510830  -8.763757  -9.554933  -8.554079
+##  [7]  -8.941304  -9.836004 -10.493521 -10.418813
+## 
+## [[2]]
+##  [1]  1.6904028  1.1347188  0.8972128 -0.2910479 -1.5086161 -0.2944618
+##  [7]  0.2100169 -0.6502670 -1.8973574  0.7590664
+## 
+## [[3]]
+##  [1] 10.453845  8.995673  9.939621 10.906163 10.299010  9.155798 11.280882
+##  [8]  9.056416  9.584447 10.474228
+## 
+## [[4]]
+##  [1] 101.61649  99.05537 101.19342  99.64898 100.03716  99.77095  97.75849
+##  [8] 101.16997  99.18833  99.79433
+```
+  
+4. map(-2:2, rnorm, n = 5) gives a list, that has five elements, for each element in in vector. Giving the output as a list lets it use vectors without getting an error with the vector. map_dbl(mu, rnorm, n = 10) gives an error because the result is no longer an atomic vector.
 ----
 
 End here. The rest of 21 is for your info only

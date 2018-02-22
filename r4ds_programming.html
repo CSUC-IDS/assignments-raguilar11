@@ -349,30 +349,163 @@ y[&quot;ddef&quot;]</code></pre>
 <li></li>
 </ol>
 <ol style="list-style-type: lower-alpha">
-<li>list(a, b, list(c, d), list(e, f)) = {a, b, {c, d}, {e,f}} b)list(list(list(list(list(list(a)))))) = {{{{{{a}}}}}}</li>
+<li>list(a, b, list(c, d), list(e, f)) = {a, b, {c, d}, {e,f}}<br />
+b)list(list(list(list(list(list(a)))))) = {{{{{{a}}}}}}</li>
 </ol>
 <p>// Run the code for a and re-evaluate your set notation. ‘a’ is a set (vector/list) of length one and so is b. What you have above may technically be correct but I would argue that it would be more correct to have ‘a’ and ‘b’ within {}</p>
 </div>
 <div id="augmented-vectors" class="section level3">
 <h3>20.7: Augmented vectors</h3>
-<p><em>Describe at least two differences between a <code>data.frame</code> and a <code>tibble</code></em> Unlike data frames, tibbles limit printing to ten rows and the amount of columns that fit in the screen. Furthermore data frames use partial matching on column names while tibbles do not. —-</p>
+<p><em>Describe at least two differences between a <code>data.frame</code> and a <code>tibble</code></em></p>
+</div>
+<div id="unlike-data-frames-tibbles-limit-printing-to-ten-rows-and-the-amount-of-columns-that-fit-in-the-screen.-furthermore-data-frames-use-partial-matching-on-column-names-while-tibbles-do-not." class="section level2">
+<h2>Unlike data frames, tibbles limit printing to ten rows and the amount of columns that fit in the screen. Furthermore data frames use partial matching on column names while tibbles do not.</h2>
 </div>
 </div>
 <div id="chapter-21-iteration" class="section level1">
 <h1>Chapter 21: Iteration</h1>
+<<<<<<< HEAD
 <p>//Don’t forget chapter 21! ### 21.2: For Loops Any one question</p>
+=======
+<div id="for-loops" class="section level3">
+<h3>21.2: For Loops</h3>
+<p>Any one question</p>
+<ol style="list-style-type: decimal">
+<li></li>
+</ol>
+<pre class="r"><code>#1.
+output &lt;- vector(&quot;double&quot;, ncol(mtcars))
+for (i in seq_along(mtcars)) {  
+  output[[i]] &lt;- mean(mtcars[[i]])
+}
+output</code></pre>
+<pre><code>##  [1]  20.090625   6.187500 230.721875 146.687500   3.596563   3.217250
+##  [7]  17.848750   0.437500   0.406250   3.687500   2.812500</code></pre>
+<pre class="r"><code>#2.
+#time_hour has two types (&quot;POSIXct&quot; and &quot;POSIXt&quot;) so it gives me an error
+#if i don't change it to something else
+flights &lt;- nycflights13::flights
+flights$time_hour &lt;- as.character(flights$time_hour)
+output &lt;- vector(&quot;character&quot;, ncol(flights))
+for (i in 1:ncol(flights)) {  
+  output[[i]] &lt;- class(flights[[i]])
+}
+output</code></pre>
+<pre><code>##  [1] &quot;integer&quot;   &quot;integer&quot;   &quot;integer&quot;   &quot;integer&quot;   &quot;integer&quot;  
+##  [6] &quot;numeric&quot;   &quot;integer&quot;   &quot;integer&quot;   &quot;numeric&quot;   &quot;character&quot;
+## [11] &quot;integer&quot;   &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;numeric&quot;  
+## [16] &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;character&quot;</code></pre>
+<pre class="r"><code>#3
+output &lt;- vector(&quot;double&quot;, ncol(iris))
+for (i in seq_along(iris)) {  
+  output[[i]] &lt;- length(unique(iris[[i]]))
+}
+output</code></pre>
+<pre><code>## [1] 35 23 43 22  3</code></pre>
+<pre class="r"><code>#4
+mu &lt;- c(-10,  0, 10, 100)
+norms &lt;- cbind(&quot;-10&quot; = 1:10, &quot;0&quot; = 1:10, &quot;10&quot; = 1:10, &quot;100&quot; = 1:10)
+for (i in 1:length(mu)) {
+  norms[ ,i]&lt;- rnorm(10, mean = mu[i])
+}
+norms</code></pre>
+<pre><code>##              -10          0        10       100
+##  [1,] -10.816432 -1.7500060  9.261131  99.12588
+##  [2,] -11.469140 -0.9264333  9.659074 101.08868
+##  [3,] -10.219580  0.9713595  8.915915 100.77214
+##  [4,]  -8.996649 -1.2350755  9.909277 100.83279
+##  [5,] -11.435374  0.4921697  8.361932 100.68485
+##  [6,]  -8.239430  1.5259275  9.453678  99.07818
+##  [7,]  -9.755496  0.4100462 10.168835 101.39065
+##  [8,]  -8.598891  2.2593169 11.035527 100.76080
+##  [9,]  -9.833644 -0.7228907 12.113562 100.12574
+## [10,] -10.450003  0.8600983  9.290330  99.15035</code></pre>
+</div>
+>>>>>>> ef1ba710d5fb074a245be2f2c0c50f6ce5f918de
 <div id="for-loop-variations" class="section level3">
 <h3>21.3: For Loop Variations</h3>
 <p>Problem #1</p>
+<pre class="r"><code>files &lt;- as.list(files)
+for (i in 1:length(files)) {
+  assign(files[i], read.csv(files[i]))
+}
+dplyr::bind_rows(files)</code></pre>
 </div>
 <div id="for-loops-vs-functionals" class="section level3">
 <h3>21.4: For loops vs functionals</h3>
 <p>Problem #2</p>
+<pre class="r"><code>col_summary &lt;- function(df, fun) {
+  for (nm in df) {
+    if(is.numeric(df$nm) == FALSE)
+      return()
+  }
+  out &lt;- vector(&quot;double&quot;, length(df))
+  for (i in seq_along(df)) {
+    out[i] &lt;- fun(df[[i]])
+  }
+  out
+}</code></pre>
 </div>
 <div id="the-map-function" class="section level3">
 <h3>21.5: the map function</h3>
 <p>Any 2 problems</p>
-<hr />
+<ol style="list-style-type: decimal">
+<li></li>
+</ol>
+<pre class="r"><code>#1
+map_dbl(mtcars, mean)</code></pre>
+<pre><code>##        mpg        cyl       disp         hp       drat         wt 
+##  20.090625   6.187500 230.721875 146.687500   3.596563   3.217250 
+##       qsec         vs         am       gear       carb 
+##  17.848750   0.437500   0.406250   3.687500   2.812500</code></pre>
+<pre class="r"><code>#2
+map_chr(nycflights13::flights, typeof)</code></pre>
+<pre><code>##           year          month            day       dep_time sched_dep_time 
+##      &quot;integer&quot;      &quot;integer&quot;      &quot;integer&quot;      &quot;integer&quot;      &quot;integer&quot; 
+##      dep_delay       arr_time sched_arr_time      arr_delay        carrier 
+##       &quot;double&quot;      &quot;integer&quot;      &quot;integer&quot;       &quot;double&quot;    &quot;character&quot; 
+##         flight        tailnum         origin           dest       air_time 
+##      &quot;integer&quot;    &quot;character&quot;    &quot;character&quot;    &quot;character&quot;       &quot;double&quot; 
+##       distance           hour         minute      time_hour 
+##       &quot;double&quot;       &quot;double&quot;       &quot;double&quot;       &quot;double&quot;</code></pre>
+<pre class="r"><code>#3
+myfun &lt;- function(x) length(unique(x))
+map(iris, myfun)</code></pre>
+<pre><code>## $Sepal.Length
+## [1] 35
+## 
+## $Sepal.Width
+## [1] 23
+## 
+## $Petal.Length
+## [1] 43
+## 
+## $Petal.Width
+## [1] 22
+## 
+## $Species
+## [1] 3</code></pre>
+<pre class="r"><code>#4
+mu &lt;- c(-10, 0, 10, 100)
+map(mu, rnorm, n = 10)</code></pre>
+<pre><code>## [[1]]
+##  [1]  -8.998024 -11.875433  -9.510830  -8.763757  -9.554933  -8.554079
+##  [7]  -8.941304  -9.836004 -10.493521 -10.418813
+## 
+## [[2]]
+##  [1]  1.6904028  1.1347188  0.8972128 -0.2910479 -1.5086161 -0.2944618
+##  [7]  0.2100169 -0.6502670 -1.8973574  0.7590664
+## 
+## [[3]]
+##  [1] 10.453845  8.995673  9.939621 10.906163 10.299010  9.155798 11.280882
+##  [8]  9.056416  9.584447 10.474228
+## 
+## [[4]]
+##  [1] 101.61649  99.05537 101.19342  99.64898 100.03716  99.77095  97.75849
+##  [8] 101.16997  99.18833  99.79433</code></pre>
+</div>
+<div id="map-22-rnorm-n-5-gives-a-list-that-has-five-elements-for-each-element-in-in-vector.-giving-the-output-as-a-list-lets-it-use-vectors-without-getting-an-error-with-the-vector.-map_dblmu-rnorm-n-10-gives-an-error-because-the-result-is-no-longer-an-atomic-vector." class="section level2">
+<h2>4. map(-2:2, rnorm, n = 5) gives a list, that has five elements, for each element in in vector. Giving the output as a list lets it use vectors without getting an error with the vector. map_dbl(mu, rnorm, n = 10) gives an error because the result is no longer an atomic vector.</h2>
 <p>End here. The rest of 21 is for your info only</p>
 </div>
 </div>
