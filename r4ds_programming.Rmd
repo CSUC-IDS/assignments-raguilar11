@@ -1,15 +1,28 @@
 ---
 title: "R programming (r4ds Section III)"
-author: "name"
-date: "date"
+author: "Ricardo Alexandro Aguilar"
+date: "01/29/2018"
 output: 
   html_document: 
     keep_md: yes
 ---
 
+```{r, echo = FALSE, message = FALSE}
+library(dplyr)
+library(magrittr)
+library(purrr)
+```
+
+
 # Ch 18: Pipes
 
 _Demonstrate the use of the regular pipe (`%>%`) and the "explosion" operator (`%$%`) in some example_
+
+```{r, eval=FALSE}
+table(iris %>% select(Species) %>% filter(Species == "setosa"))
+iris %$% table(Species, Sepal.Length)
+```
+
 
 ----
 
@@ -17,44 +30,213 @@ _Demonstrate the use of the regular pipe (`%>%`) and the "explosion" operator (`
 
 ### 19.2: When should you write a function?
 Answer any 3
+  
+1. "True" is not a parameter because the function requires only one parameter since the na.rm and finite arguments in the range function are set to TRUE. The rescale01 function requires a vector of numeric values.   
+NA would be the ouput for the missing value.  
+  
+2.
+```{r}
+# I wasn't sure what it meant by "mapped to", so I assumed it wants me to return those values
+rescale01 <- function(x) {
+  rng <- range(x, na.rm = TRUE, finite = TRUE)
+  if(x == -Inf)
+    return(0)
+  if(x == Inf)
+    return(1)
+  (x - rng[1]) / (rng[2] - rng[1])
+}
+```
+  
+5.
+```{r}
+x <- c(1, NA, NA)
+y <- c(1, 2, NA, 0)
+both_na <- function(x, y){
+  sum(is.na(x)) + sum(is.na(y))
+}
+both_na(x, y)
+```
 
+  
 _Describe one time where you wish you had written a function, but didn't._
-
+  
+I wish I wrote a function while working on the Chem data (I would have avoided copying and pasting ggplot code). 
 
 ### 19.3: Functions are for humans and computers
 Answer any 2
 
-_What does "Functions are for humans and computers" mean to you?_
+1. The first function checks if the first string starts with the second string. I would name it str_start. The second funtion removes the last element of a vector. I would name it rm_last_elem. The third function repeats the second vector until there are x amount of elements (equal to the length of the first vector). I would name it rep_vect_by_elem.
+```{r}
+f3 <- function(x, y) {
+  rep(y, length.out = length(x))
+}
+f3(1:32,2:12)
+```
 
+2.
+```{r}
+#int retrieve(int a, int i){
+#  int x = a / pow(10, i - 1);
+#  int digit = x % 10
+#  return digit;
+#}
+```
+  
+I made this function for CSCI311. I can rename it to get_digit and rename its arguments to number and digit_place (number = 81324, 4 would be the 1st digit, 2 is the 2nd digit, etc.)
+  
+_What does "Functions are for humans and computers" mean to you?_
+  
+A function should be easy for a person to understand when looking at the code and when using it.
+  
 ### 19.4 Conditional execution
 Answer any 3
+  
+1. The if function does something when a condition is met while the ifelse function does something when the condition is true and false.
+  
+```{r}
+# Example 1
+x <- 2
+y <- 0
+if(x == 3)
+  y <- x;
+y
+ifelse(x == 3, y <- x, y <- 1)
+
+# Example 2
+x <- 4
+y <- 0
+if(x > 3)
+  y <- x;
+y
+ifelse(x > 3, y <- x, y <- 1)
+
+# Example 3
+x <- 4
+y <- 0
+if(x < 3)
+  y <- x;
+y
+ifelse(x == 3, y <- x, y <- 1)
+```
+  
+2.
+```{r}
+greeting <- function(time = lubridate::hour(lubridate::now())){
+  if(time < 12)
+    "good morning"
+  else if(time < 18)
+    "good afternoon"
+  else
+    "good evening"
+}
+greeting()
+```
+
+  
+3.
+```{r}
+fizzbuzz <- function(x){
+  if(x%%3 == 0 & x%%5 == 0)
+    "fizzbuzz"
+  else if(x%%3 == 0)
+    "fizz"
+  else if(x%%5 == 0)
+    "buzz"
+  else
+    x
+}
+fizzbuzz(10)
+fizzbuzz(15)
+fizzbuzz(9)
+fizzbuzz(7)
+```
+
 
 ### 19.5 Function arguments
 Answer any 2
-
+  
+1.
+```{r}
+#commas <- function(...) stringr::str_c(..., collapse = ", ")
+#commas(letters, collapse = "-")
+```
+  
+It gives you an error because collapse is an argument for str_c not commmas.  
+  
+3.  
+The trim argument removes the given proportion of observations from each side of the vector. It would be useful when your data is skewed.  
+  
 ### 19.6: Return values
 _Is it mandatory that you `return()` a value from a function? If not, give on reasons for why you would want to do so. If so, explain what happens if you don't include the return._
-
+  
+It isn't mandatory, but it is really useful when you want to end a function under certain conditions before you reach the end. For example, if you catch an error in the input that would cause an error in the rest of the function. If you don't explicitly return something, (depending on how it was written) your function might not return the results or it will return the result of the last operation.  
+  
 ### 19.7: Environment
-_What's the problem with the example function at the beginning of this chapter?_
-
+_What's the problem with the example function at the beginning of this chapter?_  
+The function uses y as a variable, but y is not defined. The function "knows" that x will be an input, but doesn't know where y is coming from. This causes it to look into your environment and might cause bugs if you have a variable y defined in your environment.
 ----
 
 # 20: Vectors
 
 ###  20.3: Important types of atomic vector
 Answer any 2
-
+  
+1. The functions are very similar and will pretty much get the same results except with inputs that are neither finite or infinite (NA's and NaN's). Since they are neither, both functions will return false, but the ! in !is.infinite(x) will change it to true.
+  
+2. The near function returns true if the two vectors are equal. The function is able to tolerate the manipulation of the vectors and say if they're close enough to being the same depending on the tolerance of comparison.
+  
 ### 20.4: Using Atomic Vectors
 Answer #4, and then 2 others. 
+  
+
+1. 
+The function mean(is.na(x)) tells you the proportion of elements in x that are NA while sum(!is.finite(x)) gives the amount of elements in the vector that are not finite values.
+
+4.
+```{r}
+a <- function(x){
+  x[length(x)]
+}
+a(1:12)
+b <- function(x){
+  x[1:length(x) %% 2 == 0]
+}
+b(1:12)
+cc <- function(x){
+  x[-length(x)]
+}
+cc(1:12)
+d <- function(x){
+  x <- x[!is.na(x)]
+  x[x %% 2 == 0]
+}
+test <- c(1:12, NA)
+d(test)
+```
+  
+4. 
+```{r}
+x <- 1:12
+x[14]
+y <- c(abc = 1, def = 2, xyz = 5)
+y["ddef"]
+```
+  
+Subsetting with a positive integer that's bigger than the length of the vector returns NA. Similarly, subsetting with a name that doesn't exist also returns NA.
 
 ### 20.5: Recursive vectors (lists)
 Answer either one
-
+  
+1. 
+  
+a) list(a, b, list(c, d), list(e, f)) = {a, b, {c, d}, {e,f}}  
+b)list(list(list(list(list(list(a)))))) = {{{{{{a}}}}}}
+  
 ### 20.7: Augmented vectors
 
 _Describe at least two differences between a `data.frame` and a `tibble`_
-
+  
+Unlike data frames, tibbles limit printing to ten rows and the amount of columns that fit in the screen. Furthermore data frames use partial matching on column names while tibbles do not.
 ----
 
 # Chapter 21: Iteration
@@ -62,15 +244,86 @@ _Describe at least two differences between a `data.frame` and a `tibble`_
 ### 21.2: For Loops
 Any one question
 
+1.  
+```{r}
+#1.
+output <- vector("double", ncol(mtcars))
+for (i in seq_along(mtcars)) {  
+  output[[i]] <- mean(mtcars[[i]])
+}
+output
+#2.
+#time_hour has two types ("POSIXct" and "POSIXt") so it gives me an error
+#if i don't change it to something else
+flights <- nycflights13::flights
+flights$time_hour <- as.character(flights$time_hour)
+output <- vector("character", ncol(flights))
+for (i in 1:ncol(flights)) {  
+  output[[i]] <- class(flights[[i]])
+}
+output
+#3
+output <- vector("double", ncol(iris))
+for (i in seq_along(iris)) {  
+  output[[i]] <- length(unique(iris[[i]]))
+}
+output
+#4
+mu <- c(-10,  0, 10, 100)
+norms <- cbind("-10" = 1:10, "0" = 1:10, "10" = 1:10, "100" = 1:10)
+for (i in 1:length(mu)) {
+  norms[ ,i]<- rnorm(10, mean = mu[i])
+}
+norms
+```
+
+
 ### 21.3: For Loop Variations
 Problem #1
+```{r, eval=FALSE}
+files <- as.list(files)
+for (i in 1:length(files)) {
+  assign(files[i], read.csv(files[i]))
+}
+dplyr::bind_rows(files)
+```
 
 ### 21.4: For loops vs functionals
 Problem #2
 
+```{r}
+col_summary <- function(df, fun) {
+  for (nm in df) {
+    if(is.numeric(df$nm) == FALSE)
+      return()
+  }
+  out <- vector("double", length(df))
+  for (i in seq_along(df)) {
+    out[i] <- fun(df[[i]])
+  }
+  out
+}
+```
+
+
 ### 21.5: the map function
 Any 2 problems
-
+  
+1.
+```{r}
+#1
+map_dbl(mtcars, mean)
+#2
+map_chr(nycflights13::flights, typeof)
+#3
+myfun <- function(x) length(unique(x))
+map(iris, myfun)
+#4
+mu <- c(-10, 0, 10, 100)
+map(mu, rnorm, n = 10)
+```
+  
+4. map(-2:2, rnorm, n = 5) gives a list, that has five elements, for each element in in vector. Giving the output as a list lets it use vectors without getting an error with the vector. map_dbl(mu, rnorm, n = 10) gives an error because the result is no longer an atomic vector.
 ----
 
 End here. The rest of 21 is for your info only
